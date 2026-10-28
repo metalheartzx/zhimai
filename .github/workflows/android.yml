@@ -31,12 +31,15 @@ jobs:
           distribution: temurin
           java-version: "21"
 
-      - uses: android-actions/setup-android@v3
-
       - name: 安装 Android SDK 36
         run: |
-          yes | sdkmanager --licenses > /dev/null || true
-          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+          SDK="${ANDROID_HOME:-/usr/local/lib/android/sdk}"
+          echo "SDK=$SDK"
+          CMDLINE=$(find "$SDK/cmdline-tools" -maxdepth 3 -name sdkmanager -type f | head -n 1)
+          echo "sdkmanager=$CMDLINE"
+          echo "$(dirname "$CMDLINE")" >> "$GITHUB_PATH"
+          yes | "$CMDLINE" --licenses > /dev/null || true
+          "$CMDLINE" "platforms;android-36" "build-tools;36.0.0"
 
       - name: 编译 Debug APK
         run: |
