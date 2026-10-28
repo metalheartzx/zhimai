@@ -1,0 +1,34 @@
+name: Android Smoke Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 下载已发布 APK
+        run: |
+          curl -L -o app.apk "https://github.com/metalheartzx/zhimai/releases/download/v1.0.1/zhimai-1.0.1-debug.apk"
+          ls -lh app.apk
+
+      - name: 启动模拟器并抓崩溃日志
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: |
+            adb install -r app.apk
+            adb shell am start -W -n com.metalheart.zhimai/.MainActivity || true
+            sleep 12
+            echo "===== FOCUS ====="
+            adb shell dumpsys window | grep -E "mCurrentFocus|mFocusedApp" || true
+            echo "===== CRASH BUFFER ====="
+            adb logcat -d -b crash || true
+            echo "===== ANDROID RUNTIME ====="
+            adb logcat -d -s AndroidRuntime:E ActivityManager:E chromium:E || true
+            echo "===== PROCESS ====="
+            adb shell ps -A | grep zhimai || true
