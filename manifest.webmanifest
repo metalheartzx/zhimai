@@ -1,0 +1,18 @@
+{
+  "name": "知脉 · 知识点诊断",
+  "short_name": "知脉",
+  "description": "中小学数学、语文、英语、物理知识图谱与先修诊断：从目标知识点逐层回溯，定位真正卡住的基础。",
+  "lang": "zh-CN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f2f5f4",
+  "theme_color": "#0f6e62",
+  "categories": ["education", "kids"],
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

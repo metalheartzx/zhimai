@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>知脉 · 知识点诊断</title>
+<meta name="description" content="中小学数学、语文、英语、物理知识图谱与先修诊断：从目标知识点逐层回溯，定位真正卡住的基础。">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0f6e62">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="知脉">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="icon" href="assets/icons/icon-192.png">
+<link rel="stylesheet" href="app.css">
+</head>
+<body data-subject="math">
+<div id="app">
+  <header class="app-header">
+    <a class="brand" href="#/home">
+      <span class="brand-mark">知</span>
+      <span class="brand-text"><strong>知脉</strong><small>知识点诊断</small></span>
+    </a>
+    <div class="subject-switch" id="subject-switch" role="tablist" aria-label="学科"></div>
+  </header>
+  <main id="view" class="view">
+    <div class="skeleton-wrap">
+      <div class="skeleton skeleton-title"></div>
+      <div class="skeleton skeleton-card"></div>
+      <div class="skeleton skeleton-card"></div>
+    </div>
+  </main>
+  <nav class="tabbar" id="tabbar" aria-label="主导航"></nav>
+</div>
+<div id="sheet-root"></div>
+<div id="toast-root" class="toast-root" aria-live="polite"></div>
+<script src="assets/vendor/diag-engine.js"></script>
+<script src="js/core.js"></script>
+<script src="js/home.js"></script>
+<script src="js/explore.js"></script>
+<script src="js/diagnose.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/about.js"></script>
+<script>App.boot();</script>
+</body>
+</html>
