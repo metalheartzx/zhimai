@@ -38,7 +38,6 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setupSystemBars();
 
         final WebViewAssetLoader loader = new WebViewAssetLoader.Builder()
                 .addPathHandler("/assets/", new WebViewAssetLoader.AssetsPathHandler(this))
@@ -52,6 +51,13 @@ public class MainActivity extends Activity {
         root.addView(web, new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         setContentView(root);
+
+        // 必须在 setContentView 之后调用：getInsetsController 依赖已创建的 DecorView
+        try {
+            setupSystemBars();
+        } catch (Throwable ignored) {
+            // 系统栏样式失败不影响主流程
+        }
 
         WebSettings settings = web.getSettings();
         settings.setJavaScriptEnabled(true);
