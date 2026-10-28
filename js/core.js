@@ -599,12 +599,10 @@ window.App = (function () {
       if (e.key === 'Escape') closeSheet();
     });
     if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
-      var registerSW = function () {
-        navigator.serviceWorker.register('sw.js').catch(function () {});
-      };
-      // 页面可能在本脚本执行前就已完成加载，此时直接注册，避免错过 load 事件
-      if (document.readyState === 'complete') registerSW();
-      else window.addEventListener('load', registerSW);
+      // 直接注册，不依赖 load 事件（页面可能已加载完成）
+      navigator.serviceWorker.register('sw.js').catch(function (err) {
+        console.warn('Service Worker 注册失败：', err && err.message ? err.message : err);
+      });
     }
     render();
   }

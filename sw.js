@@ -1,5 +1,5 @@
 /* 知脉 · Service Worker：核心页面预缓存，数据文件运行时缓存 */
-var CACHE_NAME = 'zhimai-v3';
+var CACHE_NAME = 'zhimai-v4';
 var CORE = [
   './',
   './index.html',
