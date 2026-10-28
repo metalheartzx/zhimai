@@ -6,7 +6,7 @@ on:
 jobs:
   smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
 
@@ -29,7 +29,7 @@ jobs:
           cd android
           ./gradlew assembleDebug --no-daemon
 
-      - name: 启动模拟器、抓崩溃日志并截图
+      - name: 启动模拟器、抓日志并截图
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35
@@ -40,19 +40,31 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
             adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+            adb shell wm dismiss-keyguard || true
+            adb shell input keyevent 82 || true
             adb logcat -c
             adb shell am start -W -n com.metalheart.zhimai/.MainActivity || true
-            sleep 10
-            adb exec-out screencap -p > screen.png
+            sleep 25
+            adb exec-out screencap -p > screen-25s.png
+            sleep 45
+            adb exec-out screencap -p > screen-70s.png
             echo "===== PID ====="
             adb shell pidof com.metalheart.zhimai || true
             echo "===== WINDOW ====="
             adb shell dumpsys window | grep -E "mCurrentFocus|mFocusedApp" || true
-            echo "===== CRASH ====="
-            adb logcat -d -b crash || true
+            echo "===== ACTIVITY ====="
+            adb shell dumpsys activity activities | grep -E "ResumedActivity|mFocusedApp|state=" | head -n 20 || true
+            echo "===== ANR/FATAL ====="
+            adb logcat -d | grep -E "FATAL|AndroidRuntime|ANR in|chromium|WebView|Zhimai|zhimai" | tail -n 120 || true
+            adb logcat -d > logcat-full.txt || true
+            adb logcat -d -b crash > logcat-crash.txt || true
 
       - uses: actions/upload-artifact@v4
         with:
-          name: smoke-screenshot
-          path: screen.png
+          name: smoke-result
+          path: |
+            screen-25s.png
+            screen-70s.png
+            logcat-full.txt
+            logcat-crash.txt
           if-no-files-found: warn
