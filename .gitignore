@@ -5,3 +5,8 @@ __pycache__/
 Thumbs.db
 .trae-html-share-packages/
 .screenshots/
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+*.apk

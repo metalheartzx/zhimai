@@ -1,0 +1,51 @@
+plugins {
+    id 'com.android.application'
+}
+
+// 站点根目录（仓库根），构建时把静态资源同步进 assets/www，App 完全离线可用
+def webRoot = rootProject.projectDir.parentFile
+
+android {
+    namespace 'com.metalheart.zhimai'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'com.metalheart.zhimai'
+        minSdk 24
+        targetSdk 36
+        versionCode 1
+        versionName '1.0.0'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    sourceSets {
+        main {
+            assets.srcDirs += [layout.buildDirectory.dir('generated/assets').get().asFile]
+        }
+    }
+}
+
+tasks.register('syncWeb', Sync) {
+    from(webRoot) {
+        include 'index.html', 'app.css', 'manifest.webmanifest', 'sw.js'
+        include 'js/**', 'data/**', 'assets/**'
+    }
+    into layout.buildDirectory.dir('generated/assets/www')
+}
+
+tasks.named('preBuild').configure { dependsOn 'syncWeb' }
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.12.1'
+}
