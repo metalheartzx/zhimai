@@ -33,7 +33,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 35
-          target: google_apis
+          target: default
           arch: x86_64
           disable-animations: true
           emulator-boot-timeout: 900
@@ -44,10 +44,10 @@ jobs:
             adb shell input keyevent 82 || true
             adb logcat -c
             adb shell am start -W -n com.metalheart.zhimai/.MainActivity || true
-            sleep 25
-            adb exec-out screencap -p > screen-25s.png
-            sleep 45
-            adb exec-out screencap -p > screen-70s.png
+            sleep 60
+            adb exec-out screencap -p > screen-60s.png
+            sleep 60
+            adb exec-out screencap -p > screen-120s.png
             echo "===== PID ====="
             adb shell pidof com.metalheart.zhimai || true
             echo "===== WINDOW ====="
@@ -63,8 +63,8 @@ jobs:
         with:
           name: smoke-result
           path: |
-            screen-25s.png
-            screen-70s.png
+            screen-60s.png
+            screen-120s.png
             logcat-full.txt
             logcat-crash.txt
           if-no-files-found: warn
